@@ -18,6 +18,7 @@ var express = require('express')
   , format = require('./routes/format')
   , formatreq = require('./routes/formatreq')  
   , connect = require('connect')
+  , url = require('url')
   , http = require('http')
   , path = require('path');
 
@@ -34,6 +35,25 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Get the VCAP environment variables to connect Watson service to the Bluemix application
+ if (process.env.VCAP_SERVICES) {
+	   var VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES);
+	   // retrieve the credential information from VCAP_SERVICES for Watson QAAPI
+	   hostname   = VCAP_SERVICES["Watson QAAPI-0.1"][0].name;               
+	   passwd = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.password; 
+	   userid = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.userid; 
+       watson_url = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.url;
+      
+      parts = url.parse(watson_url);
+      console.log("********************************************");
+      console.log("Host:" + parts.hostname + "  Password:" + passwd );
+      console.log("Userid:" + userid + "  Watson-URL:"+ watson_url);
+      console.log("********************************************");
+      
+ }
+      
+
+ 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());

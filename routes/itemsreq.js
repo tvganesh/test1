@@ -18,7 +18,7 @@ exports.list = function(req, res) {
   console.log("Question:" + question + " Items:" + items);
   
   //Get the VCAP environment variables to connect Watson service to the Bluemix applicatio
-  if (process.env.VCAP_SERVICES) {
+ /* if (process.env.VCAP_SERVICES) {
 	   var VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES);
 	   // retrieve the credential information from VCAP_SERVICES for Watson QAAPI
 	   var hostname   = VCAP_SERVICES["Watson QAAPI-0.1"][0].name;               
@@ -32,7 +32,7 @@ exports.list = function(req, res) {
                   'Authorization' : "Basic " + new Buffer(userid+":"+passwd).toString("base64")};
              
        
-       var parts = url.parse(watson_url);
+       var parts = url.parse(watson_url);*/
        console.log("********************************************");
        console.log("Host:" + parts.hostname + "  Password:" + passwd );
        console.log("Userid:" + userid + "  Watson-URL:"+ watson_url);
@@ -87,7 +87,7 @@ exports.list = function(req, res) {
 	   req.end();
 	
   
-  }
+  //}
 
 }
 
