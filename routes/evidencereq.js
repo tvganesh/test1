@@ -34,10 +34,6 @@ exports.list = function(req, res) {
              
        
        var parts = url.parse(watson_url);*/
-       console.log("********************************************");
-       console.log("Host:" + parts.hostname + "  Password:" + passwd );
-       console.log("Userid:" + userid + "  Watson-URL:"+ watson_url);
-       console.log("********************************************");
        
 	   // Create the request options to POST our question to Watson
 	   var options = {host: parts.hostname,
@@ -59,7 +55,8 @@ exports.list = function(req, res) {
 		   
 		   result.on('end', function(chunk) {		  
 			  // Capture Watson's response in output. Parse Watson's answer for the fields
-			   var results = JSON.parse(output);
+			     var answers = JSON.parse(output);
+			      results = answers[0];
 			  
 			      res.render(
 					 'evidenceres', {

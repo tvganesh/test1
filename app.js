@@ -39,17 +39,21 @@ app.use(express.static(path.join(__dirname, 'public')));
  if (process.env.VCAP_SERVICES) {
 	   var VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES);
 	   // retrieve the credential information from VCAP_SERVICES for Watson QAAPI
-	   hostname   = VCAP_SERVICES["Watson QAAPI-0.1"][0].name;               
-	   passwd = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.password; 
-	   userid = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.userid; 
-       watson_url = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.url;
-      
-      parts = url.parse(watson_url);
+	   hostname   = VCAP_SERVICES["question_and_answer"][0].name;               
+	   passwd = VCAP_SERVICES["question_and_answer"][0].credentials.password; 
+	   username = VCAP_SERVICES["question_and_answer"][0].credentials.username; 
+       watson_url = VCAP_SERVICES["question_and_answer"][0].credentials.url;
+       parts = url.parse(watson_url +'/v1/question/healthcare');
+       
       console.log("********************************************");
       console.log("Host:" + parts.hostname + "  Password:" + passwd );
-      console.log("Userid:" + userid + "  Watson-URL:"+ watson_url);
+      console.log("Username:" + username + "  Watson-URL:"+ watson_url);
       console.log("********************************************");
-      
+
+      headers = {'Content-Type'  :'application/json',
+              'X-synctimeout' : '30',
+              'Authorization' : "Basic " + new Buffer(username+":"+passwd).toString("base64")};
+   
  }
       
 

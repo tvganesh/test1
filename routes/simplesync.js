@@ -31,31 +31,31 @@ exports.list = function(req, res) {
 	   var passwd = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.password; 
 	   var userid = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.userid; 
        var watson_url = VCAP_SERVICES["Watson QAAPI-0.1"][0].credentials.url;
-       
-       // Set the required headers for posting the REST query to Watson
-       headers = {'Content-Type'  :'application/json',
-                  'X-synctimeout' : syncTimeout,
-                  'Authorization' : "Basic " + new Buffer(userid+":"+passwd).toString("base64")};
-             
+                        
        
        var parts = url.parse(watson_url);*/
-       console.log("********************************************");
-       console.log("Host:" + parts.hostname + "  Password:" + passwd );
-       console.log("Userid:" + userid + "  Watson-URL:"+ watson_url);
-       console.log("********************************************");
+       
+       
+    // Set the required headers for posting the REST query to Watson
+       headers = {'Content-Type'  :'application/json',
+                  'X-synctimeout' : syncTimeout,
+                  'Authorization' : "Basic " + new Buffer(username+":"+passwd).toString("base64")};
        
 	   // Create the request options to POST our question to Watson
 	   var options = {host: parts.hostname,
-                 port: 443,
+                 port: parts.port,
                  path: parts.pathname,
                  method: 'POST',
                  headers: headers,
-                 rejectUnauthorized: false, // ignore certificates
-                 requestCert: true,
-                 agent: false};
+                 //rejectUnauthorized: false, // ignore certificates
+                 //requestCert: true,
+                 //agent: false
+                 };
 	  var output="";
 	   // Create a request to POST to Watson
 	   var req = https.request(options, function(result) {
+		   result.setEncoding('utf-8');
+
 		   // Retrieve and return the result back to the client  		  	   
 		   result.on("data", function(chunk) {     		  
 			   output += chunk;  
@@ -65,8 +65,14 @@ exports.list = function(req, res) {
 		   
 		   result.on('end', function(chunk) {		  
 			  // Capture Watson's response in output. Parse Watson's answer for the fields
-			   
-			   var results = JSON.parse(output);
+			     /*var rslt = output.toString();
+			     res.render(
+						 'answer', {
+	                      "rslt":rslt
+	                                          
+				   });*/
+			     var answers = JSON.parse(output);
+			      results = answers[0];
 			      res.render(
 					 'answer', {
                       "results":results
